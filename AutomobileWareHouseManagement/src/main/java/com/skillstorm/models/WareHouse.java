@@ -10,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -22,13 +23,12 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name="WareHouse", schema="automobiles")
-@NoArgsConstructor
-@AllArgsConstructor
-@Getter 
-@Setter
+@Table(name="WareHouse", schema="automobiles", uniqueConstraints = { @UniqueConstraint(columnNames = { "location"}) })
+
 public class WareHouse {
 	
+	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "warehouse_id")
@@ -45,8 +45,61 @@ public class WareHouse {
 	@JsonBackReference
 	@OneToMany(mappedBy = "warehouse", cascade = CascadeType.ALL, orphanRemoval = true)
     @OnDelete(action = OnDeleteAction.CASCADE) 
-	List<BikeMake> bikeMakes;
-	
+	List<MotorcycleMake> motorcycleMake;
 	
 
+	public WareHouse() {
+		super();
+	}
+
+
+	public int getId() {
+		return id;
+	}
+
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+
+	public String getLocation() {
+		return location;
+	}
+
+
+	public void setLocation(String location) {
+		this.location = location;
+	}
+
+
+	public List<CarMake> getCarMakes() {
+		return carMakes;
+	}
+
+
+	public void setCarMakes(List<CarMake> carMakes) {
+		this.carMakes = carMakes;
+	}
+
+
+	public List<MotorcycleMake> getMotorcycleMake() {
+		return motorcycleMake;
+	}
+
+
+	public void setMotorcycleMake(List<MotorcycleMake> motorcycleMake) {
+		this.motorcycleMake = motorcycleMake;
+	}
+
+
+	@Override
+	public String toString() {
+		return "WareHouse [id=" + id + ", location=" + location + ", carMakes=" + carMakes + ", motorcycleMake="
+				+ motorcycleMake + "]";
+	}
+
+
+
+	
 }

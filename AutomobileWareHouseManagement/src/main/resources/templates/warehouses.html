@@ -1,0 +1,36 @@
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+		integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
+
+<body>
+
+	<div class="container">
+		<div class="row">
+			<h1>Warehouses</h1>
+		</div>
+		<table class="table table-striped table-bordered">
+			<thead class="table-dark">
+				<tr>
+					<th>WareHouse Location</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="warehouse: ${warehouses}">
+					<td>
+					 <a th:href="@{/autoinventorycontrol/inventory/{warehouseId}(warehouseId=${warehouse.id})}" th:text="${warehouse.location}"/>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+
+	</div>
+
+
+
+
+</body>
+
+</html>

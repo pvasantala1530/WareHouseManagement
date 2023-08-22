@@ -16,21 +16,21 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name="CarInventory", schema="automobiles")
+@Table(name="MotorcycleInventory", schema="automobiles")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter 
 @Setter
-public class CarInventory {
+public class MotorcycleInventory {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "car_inventory_id")
+	@Column(name = "motorcycle_inventory_id")
 	private int id;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="carmake_id", nullable=false)
-	private CarMake carmake;
+	@JoinColumn(name="motorcyclemake_id", nullable=false)
+	private MotorcycleMake motorcyclemake;
 	
 	@Column()
 	private String model;
@@ -43,28 +43,30 @@ public class CarInventory {
 	
 	@Column()
 	private int price;
-	
-	
 
-	public CarInventory() {
+	public MotorcycleInventory(MotorcycleMake motorcyclemake, String model, String color, int quantity, int price) {
 		super();
-	}
-
-	public CarInventory(CarMake carmake, String model, String color, int quantity, int price) {
-		super();
-		this.carmake = carmake;
+		this.motorcyclemake = motorcyclemake;
 		this.model = model;
 		this.color = color;
 		this.quantity = quantity;
 		this.price = price;
 	}
 
-	public CarMake getCarmake() {
-		return carmake;
+	public int getId() {
+		return id;
 	}
 
-	public void setCarmake(CarMake carmake) {
-		this.carmake = carmake;
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public MotorcycleMake getMotorcyclemake() {
+		return motorcyclemake;
+	}
+
+	public void setMotorcyclemake(MotorcycleMake motorcyclemake) {
+		this.motorcyclemake = motorcyclemake;
 	}
 
 	public String getModel() {
@@ -98,12 +100,9 @@ public class CarInventory {
 	public void setPrice(int price) {
 		this.price = price;
 	}
+	
+	
 
-	@Override
-	public String toString() {
-		return "CarInventory [id=" + id +  ", model=" + model + ", color=" + color
-				+ ", quantity=" + quantity + ", price=" + price + "]";
-	}
 	
 	
 }

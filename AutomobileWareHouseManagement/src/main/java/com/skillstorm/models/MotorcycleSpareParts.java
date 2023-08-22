@@ -15,16 +15,16 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name="BikeSpareParts", schema="automobiles")
+@Table(name="MotorcycleParts", schema="automobiles")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter 
 @Setter 
-public class BikeSpareParts {
+public class MotorcycleSpareParts {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "bike_sparepart_id")
+	@Column(name = "motorcycle_sparepart_id")
 	private int id;
 	
 	/*

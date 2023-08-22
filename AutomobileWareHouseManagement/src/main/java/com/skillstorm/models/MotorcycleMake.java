@@ -25,16 +25,16 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name="CarMake", schema="automobiles")
+@Table(name="MotorcycleMake", schema="automobiles")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter 
 @Setter
-public class CarMake {
+public class MotorcycleMake {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="car_make_id")
+	@Column(name="motorcycle_make_id")
 	private int id;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -47,61 +47,72 @@ public class CarMake {
 	private String make;
 	
 	@JsonBackReference
-	@OneToMany(mappedBy = "carmake", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "motorcyclemake", cascade = CascadeType.ALL, orphanRemoval = true)
     @OnDelete(action = OnDeleteAction.CASCADE) 
-	List<CarInventory> carinventory;
+	List<MotorcycleInventory> motorcycleinventory;
 	
 	
 	
 
-	public CarMake() {
+	public MotorcycleMake() {
 		super();
 	}
 
-	public CarMake(WareHouse warehouse, String make, List<CarInventory> carinventory) {
-		super();
-		this.warehouse = warehouse;
-		this.make = make;
-		this.carinventory = carinventory;
-	}
+
+
 
 	public int getId() {
 		return id;
 	}
 
+
+
+
 	public void setId(int id) {
 		this.id = id;
 	}
+
+
+
 
 	public WareHouse getWarehouse() {
 		return warehouse;
 	}
 
+
+
+
 	public void setWarehouse(WareHouse warehouse) {
 		this.warehouse = warehouse;
 	}
+
+
+
 
 	public String getMake() {
 		return make;
 	}
 
+
+
+
 	public void setMake(String make) {
 		this.make = make;
 	}
 
-	public List<CarInventory> getCarinventory() {
-		return carinventory;
+
+
+
+	public List<MotorcycleInventory> getMotorcycleinventory() {
+		return motorcycleinventory;
 	}
 
-	public void setCarinventory(List<CarInventory> carinventory) {
-		this.carinventory = carinventory;
+
+
+
+	public void setMotorcycleinventory(List<MotorcycleInventory> motorcycleinventory) {
+		this.motorcycleinventory = motorcycleinventory;
 	}
 
-	@Override
-	public String toString() {
-		return "CarMake [id=" + id +  ", make=" + make + ", carinventory=" + carinventory
-				+ "]";
-	}
-	
 	
 }

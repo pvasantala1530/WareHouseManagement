@@ -1,0 +1,67 @@
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+		integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+	<script>
+
+		function showinventorydetails(carmakeId) {
+			alert(carmakeId);
+			let xhr = new XMLHttpRequest();
+
+			// Making our connection 
+			let url = 'autoinventorycontrol/warehouses/showinventorydetails/'+ carmakeId;
+			xhr.open("GET", url, true);
+
+			// function execute after request is successful
+			xhr.onreadystatechange = function () {
+				if (this.readyState == 4 && this.status == 200) {
+					console.log(this.responseText);
+				}
+			}
+			// Sending our request
+			xhr.send();
+		}
+	</script>
+</head>
+
+<body>
+
+	<div class="container">
+		<div class="row">
+			<h1>Warehouses</h1>
+		</div>
+		<table class="table table-striped table-bordered">
+			<thead class="table-dark">
+				<tr>
+					<th th:text="${warehouseLoc}"></th>
+
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="carmake: ${carmakelist}">
+					<td th:text="${carmake.make}"></td>
+				</tr>
+			</tbody>
+		</table>
+
+
+		<div class="list-group">
+			<a href="#" class="list-group-item list-group-item-action active" th:text="${warehouseLoc}"></a>
+			<th:block th:each="carmake, carState : ${carmakelist}">
+				<a href="#" class="list-group-item list-group-item-action" th:text="${carmake.make}"
+					th:onclick="showinventorydetails([[${carmake.makeId}]]);"></a>
+					<input type="hidden" th:value="${carmake.makeId}" th:id="${carState.index}" id=""/>
+			</th:block>
+		</div>
+
+
+	</div>
+
+
+
+
+</body>
+
+</html>
