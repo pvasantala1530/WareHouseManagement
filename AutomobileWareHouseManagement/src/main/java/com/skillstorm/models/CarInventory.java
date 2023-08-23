@@ -59,6 +59,14 @@ public class CarInventory {
 		this.price = price;
 	}
 
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
 	public CarMake getCarmake() {
 		return carmake;
 	}

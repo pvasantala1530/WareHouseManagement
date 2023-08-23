@@ -1,5 +1,6 @@
 <script>
-function showinventorydetails(){
+alert('captured')
+function showinventorydetails1(){
 	alert('captured')
 }
 
