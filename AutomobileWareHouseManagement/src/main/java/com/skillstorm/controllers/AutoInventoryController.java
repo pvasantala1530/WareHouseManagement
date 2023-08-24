@@ -105,5 +105,16 @@ public class AutoInventoryController {
 		return dtolist;
 
 	}
+	
+	
+	
+	
+	
+	@RequestMapping("/error")
+	public String fallback(Model model) {
+
+		logger.info("Entered");
+		return "error";
+	}
 
 }

@@ -16,5 +16,7 @@ public interface CarMakeRepository extends JpaRepository<CarMake, Integer>{
 	
 	public List<CarMake> findByWarehouseId(int id);
 	
+	
+	
 
 }

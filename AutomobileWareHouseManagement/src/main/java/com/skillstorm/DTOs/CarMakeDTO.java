@@ -3,6 +3,7 @@ package com.skillstorm.DTOs;
 public class CarMakeDTO {
 
 	private String make;
+	private int makecount;
 	private int makeId;
 	private int warehouseId;
 	private String warehouseLocation;
@@ -14,6 +15,16 @@ public class CarMakeDTO {
 	}
 	
 	
+	public int getMakecount() {
+		return makecount;
+	}
+
+
+	public void setMakecount(int makecount) {
+		this.makecount = makecount;
+	}
+
+
 	public int getMakeId() {
 		return makeId;
 	}
@@ -42,11 +53,14 @@ public class CarMakeDTO {
 	public void setWarehouseLocation(String warehouseLocation) {
 		this.warehouseLocation = warehouseLocation;
 	}
+
+
 	@Override
 	public String toString() {
-		return "CarMakeDTO [make=" + make +"makeid= "+makeId+ ", warehouseId=" + warehouseId + ", warehouseLocation=" + warehouseLocation
-				+ "]";
+		return "CarMakeDTO [make=" + make + ", makecount=" + makecount + ", makeId=" + makeId + ", warehouseId="
+				+ warehouseId + ", warehouseLocation=" + warehouseLocation + "]";
 	}
+	
 
 	
 	

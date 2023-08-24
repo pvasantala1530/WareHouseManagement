@@ -11,4 +11,7 @@ import com.skillstorm.models.CarInventory;
 public interface CarInventoryRepository extends JpaRepository<CarInventory, Integer>{
 
 	public List<CarInventory> findByCarmakeId(int id);
+	
+	public int countByCarMakeId(int carmakeid);
+	
 }
