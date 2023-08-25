@@ -10,5 +10,13 @@ public interface CarInventoryService {
  	List<CarInventoryDTO> findCarInventoryBymakeId(int carmakeid);	
 
  	CarInventory saveCarInventory(CarInventoryDTO cidto);
+ 	
+ 	CarInventory getCarInventory(int inventoryid);
+ 	
+ 	void updateCarInventory(CarInventory ci,String inventoryid, String carmakeid);
+ 	
+ 	void deleteCarInventoryById(int inventoryid);
+ 	
+ 	
 
 }

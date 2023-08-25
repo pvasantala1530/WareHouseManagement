@@ -38,6 +38,7 @@ public class CarInventoryDTOMapper {
 		ci.setPrice(cidto.getPrice());
 		ci.setQuantity(cidto.getQuantity());
 		
+		
 		return ci;
 	}
 
@@ -49,11 +50,17 @@ public class CarInventoryDTOMapper {
 		// "+cm.getWarehouse().getLocation());
 		// logger.info(cm.getMake());
 		dto.setColor(ci.getColor());
+		
+		if(ci.getCarmake()!=null && ci.getCarmake().getId()!=0)
 		dto.setcarmakeid(ci.getCarmake().getId());
+		
 		dto.setModel(ci.getModel());
 		dto.setPrice(ci.getPrice());
 		dto.setQuantity(ci.getQuantity());
+		dto.setInventoryid(ci.getId());
 		
+		if(ci.getCarmake()!=null && ci.getCarmake().getWarehouse()!=null)
+		dto.setWarehouseid(ci.getCarmake().getWarehouse().getId());
 		
 
 		return dto;

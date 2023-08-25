@@ -2,6 +2,8 @@ package com.skillstorm.DTOs;
 
 public class CarInventoryDTO {
 	
+	private int inventoryid;
+	
 	private int carmakeid;
 	
 	private String model;
@@ -11,11 +13,30 @@ public class CarInventoryDTO {
 	private int quantity;
 	
 	private int price;
+	
+	private int warehouseid;
+
+	public int getWarehouseid() {
+		return warehouseid;
+	}
+
+	public void setWarehouseid(int warehouseid) {
+		this.warehouseid = warehouseid;
+	}
 
 	public CarInventoryDTO() {
 		super();
 	}
 
+	public int getInventoryid() {
+		return inventoryid;
+	}
+
+	public void setInventoryid(int inventoryid) {
+		this.inventoryid = inventoryid;
+	}
+
+	
 	public int getcarmakeid() {
 		return carmakeid;
 	}

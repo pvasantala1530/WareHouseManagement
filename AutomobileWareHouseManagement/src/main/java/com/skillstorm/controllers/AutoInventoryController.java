@@ -18,6 +18,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.skillstorm.DTOs.CarInventoryDTO;
 import com.skillstorm.DTOs.CarMakeDTO;
 import com.skillstorm.DTOs.WareHouseResponseDTO;
+import com.skillstorm.mappers.CarInventoryDTOMapper;
+import com.skillstorm.models.CarInventory;
+import com.skillstorm.models.CarMake;
 import com.skillstorm.services.CarInventoryServiceImpl;
 import com.skillstorm.services.CarMakeServiceImpl;
 import com.skillstorm.services.WareHouseServiceImpl;
@@ -83,12 +86,45 @@ public class AutoInventoryController {
 		return "carinventory";
 	}
 	
+	@GetMapping("/inventory/edit/{inventoryid}/{carmakeid}")//{color}/{price}/{quantity}/{model}")
+	public String editInventory(@PathVariable String inventoryid,@PathVariable String carmakeid,Model model){//,@PathVariable String color,@PathVariable String model,@PathVariable int quantity,
+			//athVariable int price,@PathVariable int carmakeid,Model model1) {
+		
+			model.addAttribute("carmakeid", carmakeid);
+		model.addAttribute("invid", inventoryid);
+		
+		logger.info("(((((((((((((((((((()))))))))))))"+inventoryid+"------"+carmakeid);
+		
+		model.addAttribute("carinv", carInventoryServiceImpl.getCarInventory(Integer.valueOf(inventoryid)));
+		
+		return "updateinventory";
+				
+	}
+	
+	@PostMapping("updateinventory/{inventoryid}/{carmakeid}")
+	public String updateInventory(@ModelAttribute("carinv") CarInventory ci, @PathVariable String inventoryid,
+			@PathVariable String carmakeid) {
+		carInventoryServiceImpl.updateCarInventory(ci, inventoryid, carmakeid);
+		return "redirect:/autoinventorycontrol/warehouses";
+		 }
+	
+	@GetMapping("deleteinventory/{inventoryid}")
+	public String deleteInventory(@PathVariable String inventoryid)
+	{
+		
+		carInventoryServiceImpl.deleteCarInventoryById(Integer.valueOf(inventoryid));
+		return "redirect:/autoinventorycontrol/warehouses";
+	}
+	
 	@PostMapping("/inventory/{makeid}")
 	public String SaveInventory(@ModelAttribute ("carinventorydto") CarInventoryDTO cidto, @PathVariable String makeid) {
 		
 		cidto.setcarmakeid(Integer.valueOf(makeid));
-		logger.info("^^^^^^^^^^^^^^^^^^cidto^^^^^^^^^^^"+cidto.toString());
 		carInventoryServiceImpl.saveCarInventory(cidto);
+		
+		logger.info("^^^^^^^^^^^^^^^^^^cidto^^^^^^^^^^^"+cidto.toString());
+		
+		
 		return "redirect:/autoinventorycontrol/warehouses";
 	}
 	
