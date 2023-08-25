@@ -12,7 +12,8 @@ import com.skillstorm.models.CarInventory;
 
 @Component
 public class CarInventoryDTOMapper {
-
+	
+	
 	Logger logger = LoggerFactory.getLogger(getClass());
 
 	public List<CarInventoryDTO> carInventoryEntitytoDTOMapper(List<CarInventory> carInventoryList) {
@@ -28,6 +29,17 @@ public class CarInventoryDTOMapper {
 		return dtoList;
 
 	}
+	
+	public CarInventory carInventoryDTOtoEntityMapper(CarInventoryDTO cidto) {
+		
+		CarInventory ci = new CarInventory();
+		ci.setColor(cidto.getColor());
+		ci.setModel(cidto.getModel());
+		ci.setPrice(cidto.getPrice());
+		ci.setQuantity(cidto.getQuantity());
+		
+		return ci;
+	}
 
 	public CarInventoryDTO mapEntityToDTO(CarInventory ci) {
 
@@ -37,10 +49,12 @@ public class CarInventoryDTOMapper {
 		// "+cm.getWarehouse().getLocation());
 		// logger.info(cm.getMake());
 		dto.setColor(ci.getColor());
-		dto.setInventoryid(ci.getId());
+		dto.setcarmakeid(ci.getCarmake().getId());
 		dto.setModel(ci.getModel());
 		dto.setPrice(ci.getPrice());
 		dto.setQuantity(ci.getQuantity());
+		
+		
 
 		return dto;
 	}

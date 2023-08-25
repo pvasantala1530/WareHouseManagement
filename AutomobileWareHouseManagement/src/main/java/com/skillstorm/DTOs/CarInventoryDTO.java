@@ -1,10 +1,8 @@
 package com.skillstorm.DTOs;
 
-import javax.persistence.Column;
-
 public class CarInventoryDTO {
 	
-	private int inventoryid;
+	private int carmakeid;
 	
 	private String model;
 	
@@ -18,12 +16,12 @@ public class CarInventoryDTO {
 		super();
 	}
 
-	public int getInventoryid() {
-		return inventoryid;
+	public int getcarmakeid() {
+		return carmakeid;
 	}
 
-	public void setInventoryid(int inventoryid) {
-		this.inventoryid = inventoryid;
+	public void setcarmakeid(int carmakeid) {
+		this.carmakeid = carmakeid;
 	}
 
 	public String getModel() {
@@ -60,7 +58,7 @@ public class CarInventoryDTO {
 
 	@Override
 	public String toString() {
-		return "CarInventoryDTO [inventoryid=" + inventoryid + ", model=" + model + ", color=" + color + ", quantity="
+		return "CarInventoryDTO [carmakeid=" + carmakeid + ", model=" + model + ", color=" + color + ", quantity="
 				+ quantity + ", price=" + price + "]";
 	}
 	

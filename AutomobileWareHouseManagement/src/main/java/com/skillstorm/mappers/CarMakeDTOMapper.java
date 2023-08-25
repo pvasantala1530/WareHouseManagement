@@ -11,11 +11,20 @@ import org.springframework.stereotype.Component;
 
 import com.skillstorm.DTOs.CarMakeDTO;
 import com.skillstorm.models.CarMake;
+import com.skillstorm.repositories.CarInventoryRepository;
 
 @Component
 public class CarMakeDTOMapper {
 
 	Logger logger = LoggerFactory.getLogger(getClass());
+	
+	private CarInventoryRepository carInventoryRepository;
+	
+
+	public CarMakeDTOMapper(CarInventoryRepository carInventoryRepository) {
+		super();
+		this.carInventoryRepository = carInventoryRepository;
+	}
 
 	public List<CarMakeDTO> carMakeEntitytoDTOMapper(List<CarMake> carMakeList) {
 
@@ -44,6 +53,8 @@ public class CarMakeDTOMapper {
 		dto.setMakeId(cm.getId());
 		dto.setWarehouseId(cm.getWarehouse().getId());
 		dto.setWarehouseLocation(cm.getWarehouse().getLocation());
+		
+		dto.setMakecount(carInventoryRepository.countByCarmakeId(cm.getId()));
 		
 		return dto;
 	}

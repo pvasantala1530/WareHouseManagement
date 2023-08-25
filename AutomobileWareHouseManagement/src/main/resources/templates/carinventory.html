@@ -1,14 +1,30 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
+	<title>Auto Inventory Control</title>
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
 		integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
-	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
 
 	<script>
+
+		function gotoAddInventory(warehouseId) {
+			
+			var ele = document.getElementsByName('add_inv');
+ 			let flag = 0;
+            for (i = 0; i < ele.length; i++) {
+                if (ele[i].checked)
+                    {	
+						flag = 1;
+						let carmake = document.getElementById(ele[i].value).value;
+						window.location.href = "new/" + warehouseId+"/"+ele[i].value+"/"+carmake;
+					}
+            }
+            if(flag==0)
+            
+			alert('Select Car Brand to add Inventory');
+		}
 
 		function showinventorydetails(carmakeId) {
 
@@ -32,7 +48,6 @@
 							"<td>" + item.color + "</td>" +
 							"<td>" + item.price + "</td>" +
 							"<td>" + item.quantity + "</td>" +
-							"<td><input type='checkbox' id=inventoryid" + item.inventoryid + "' value='" + item.inventoryid + "''></td>" +
 							"</tr><tr>"
 					});
 
@@ -56,72 +71,36 @@
 	<div class="container">
 		<div class="row">
 			<h1>Auto Inventory Control</h1>
-		</div><br>
-		<!--<table class="table table-striped table-bordered">
+		</div><br><br>
+
+		<h3>[(${warehouseLoc})]</h3>
+
+
+
+		<table class="table table-striped table-bordered">
 			<thead class="table-dark">
 				<tr>
-					<th th:text="${warehouseLoc}"></th>
-<a href="#" class="list-group-item list-group-item-action active" th:text="${warehouseLoc}"></a>
+					<th>Inventory Details</th>
 				</tr>
 			</thead>
 			<tbody>
-				<tr th:each="carmake: ${carmakelist}">
-					<td th:text="${carmake.make}"></td>
+				<tr th:each="carmake : ${carmakelist}">
+					<td>
+						<input type="radio" th:value="${carmake.makeId}" id="carmakeradio" name="add_inv">
+						<input type="hidden" th:value="${carmake.make}" th:id="${carmake.makeId}"}>
+						<a th:onclick="showinventorydetails([[${carmake.makeId}]]);" th:text="${carmake.make}"
+							style="cursor: pointer" />
+					</td>
 				</tr>
 			</tbody>
-		</table>-->
-		<nav class="navbar navbar-expand-lg navbar-light bg-light">
-			<a class="navbar-brand" href="/autoinventorycontrol/warehouses">Warehouses</a>
-			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-				aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-				<span class="navbar-toggler-icon"></span>
-			</button>
+		</table>
 
-			<div class="collapse navbar-collapse" id="navbarSupportedContent">
-				<ul class="navbar-nav mr-auto">
-					<li class="nav-item active">
-						<a class="nav-link" href="#">View Inventory <span class="sr-only">(current)</span></a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="#">Add Inventory</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="#">Update Inventory</a>
-					</li>
-					<!--<li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Dropdown
-        </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href="#">Action</a>
-          <a class="dropdown-item" href="#">Another action</a>
-          <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="#">Something else here</a>
-        </div>
-      </li>-->
-					<li class="nav-item">
-						<a class="nav-link disabled" href="#">Disabled</a>
-					</li>
-				</ul>
-
+		<br>
+		<div class="row">
+			<div class="col-lg-3">
+				<a th:onclick="gotoAddInventory([[${warehouseId}]]);" class="btn btn-primary btn-sm mb-3">Add inventory</a>
 			</div>
-		</nav>
-
-		<div class="list-group">
-			<button type="button" class="list-group-item list-group-item-dark active"
-				th:text="${warehouseLoc}"></button>
-
-			
-
-			<th:block th:each="carmake, carState : ${carmakelist}">
-				<li class="list-group-item d-flex justify-content-between align-items-center" style="cursor: pointer" th:onclick="showinventorydetails([[${carmake.makeId}]]);">
-					[(${carmake.make})]
-					<span class="badge badge-primary badge-pill">14</span>
-				</li>
-			</th:block>
 		</div>
-
-
 		<br><br>
 		<table class="table" hidden="hidden" id="inventoryDetstab">
 			<thead class="thead-light">
@@ -139,57 +118,10 @@
 		</table>
 
 
-		<button type="button" id="add" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"
-			data-whatever="@mdo">Add new</button>
-		<button type="button" id="update" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"
-			data-whatever="@fat">Update Existing</button>
-		<button type="button" id="delete" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"
-			data-whatever="@getbootstrap">Delete Existing</button>
 
-		<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-			aria-hidden="true">
-			<div class="modal-dialog" role="document">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h5 class="modal-title" id="exampleModalLabel">New message</h5>
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-						</button>
-					</div>
-					<div class="modal-body">
-						<form>
-							<div class="form-group">
-								<label for="recipient-name" class="col-form-label">Recipient:</label>
-								<input type="text" class="form-control" id="recipient-name">
-							</div>
-							<div class="form-group">
-								<label for="message-text" class="col-form-label">Message:</label>
-								<textarea class="form-control" id="message-text"></textarea>
-							</div>
-						</form>
-					</div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-						<button type="button" class="btn btn-primary">Send message</button>
-					</div>
-				</div>
-			</div>
-		</div>
+
 
 </body>
-<script>
 
-
-
-	$('#exampleModal').on('show.bs.modal', function (event) {
-		var button = $(event.relatedTarget) // Button that triggered the modal
-		var recipient = button.data('whatever') // Extract info from data-* attributes
-		// If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
-		// Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
-		var modal = $(this)
-		modal.find('.modal-title').text('New message to ' + recipient)
-		modal.find('.modal-body input').val(recipient)
-	})
-</script>
 
 </html>

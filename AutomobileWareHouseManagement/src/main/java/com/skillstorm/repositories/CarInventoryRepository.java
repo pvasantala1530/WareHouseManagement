@@ -12,6 +12,6 @@ public interface CarInventoryRepository extends JpaRepository<CarInventory, Inte
 
 	public List<CarInventory> findByCarmakeId(int id);
 	
-	public int countByCarMakeId(int carmakeid);
+	public int countByCarmakeId(int carmakeid);
 	
 }
