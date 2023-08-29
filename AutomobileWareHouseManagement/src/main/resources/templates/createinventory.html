@@ -6,8 +6,79 @@
 		integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
 
+	<style>
+		.error {
+			color: red;
+		}
+	</style>
 
 
+	<script th:src="@{/js/showinventory.js}"></script>
+	<script>
+		function validateform() {
+			let model = document.getElementById('model').value;
+			let color = document.getElementById('color').value;
+			let quantity = document.getElementById('quantity').value;
+			let price = document.getElementById('price').value;
+
+			if (model.length == 0) {
+				let element = document.getElementById("modelerror");
+				let hidden = element.getAttribute("hidden");
+				element.removeAttribute("hidden");
+			}
+			else
+				document.getElementById('modelerror').hidden = true
+				
+			if (color.length == 0) {
+				let element = document.getElementById("colorerror");
+				let hidden = element.getAttribute("hidden");
+				element.removeAttribute("hidden");
+			}
+			else
+				document.getElementById('colorerror').hidden = true
+			
+			if (quantity <= 0) {
+				let element = document.getElementById("quantityerror");
+				let hidden = element.getAttribute("hidden");
+				element.removeAttribute("hidden");
+			}
+			else if(isNaN(quantity))
+			{
+				let element = document.getElementById("quantitynanerror");
+				let hidden = element.getAttribute("hidden");
+				element.removeAttribute("hidden");
+			}
+			else
+				{
+					document.getElementById('quantityerror').hidden = true
+					document.getElementById('quantitynanerror').hidden = true
+				}
+			
+			if (price <= 0) {
+				let element = document.getElementById("priceerror");
+				let hidden = element.getAttribute("hidden");
+				element.removeAttribute("hidden");
+			}
+			else if(isNaN(price))
+			{
+				let element = document.getElementById("priceerror");
+				let hidden = element.getAttribute("hidden");
+				element.removeAttribute("hidden");
+			}
+			else
+			{
+				document.getElementById('priceerror').hidden = true
+				document.getElementById('pricenanerror').hidden = true
+				
+			}
+			if(model.length>0 && color.length>0 && quantity>0 && price>0)
+			{
+				const form = document.getElementById("createinv");
+				form.submit();
+			}
+
+		}
+	</script>
 </head>
 
 <body>
@@ -39,32 +110,41 @@
 				<h5 class="text-center"> Make: [(${carmake})]</h5>
 
 				<div class="card-body">
-					<form th:action="@{/autoinventorycontrol/inventory/{makeid}(makeid=${makeid})}"
-						th:object="${carinventorydto}" method="POST">
-
+					<form id="createinv" action="#" th:action="@{/autoinventorycontrol/inventory/{makeid}(makeid=${makeid})}"
+						th:object="${carinventorydto}" method="POST" onsubmit="validateform();">
+						
 						<div class="form-group">
-							<label> Model </label>
-							<input type="text" name="model" th:field="*{model}" class="form-control"
+							<label> Required fields marked as * </label>
+						</div>
+						<div class="form-group">
+							<label> Model* </label>
+							<input type="text" name="model" id="model" th:field="*{model}" class="form-control"
 								placeholder="Car Model">
+							<label class="error" id="modelerror" hidden="true"> Model cannot be empty </label>
 						</div>
 						<div class="form-group">
-							<label> Color </label>
-							<input type="text" name="color" th:field="*{color}" class="form-control"
+							<label> Color* </label>
+							<input type="text" name="color" id="color" th:field="*{color}" class="form-control"
 								placeholder="Color">
+							<label class="error" id="colorerror" hidden="true"> Color cannot be empty </label>
 						</div>
 						<div class="form-group">
-							<label> Quantity </label>
-							<input type="text" name="quantity" th:field="*{quantity}" class="form-control"
+							<label> Quantity* </label>
+							<input type="text" name="quantity" id="quantity" th:field="*{quantity}" class="form-control"
 								placeholder="Quantity">
+							<label class="error" id="quantityerror" hidden="true"> Quantity cannot be less than zero</label>
+							<label class="error" id="quantitynanerror" hidden="true"> Quantity should be a number</label>
 						</div>
 						<div class="form-group">
-							<label> Price </label>
-							<input type="text" name="price" th:field="*{price}" class="form-control"
+							<label> Price* </label>
+							<input type="text" name="price" id="price" th:field="*{price}" class="form-control"
 								placeholder="Enter Price">
+							<label class="error" id="priceerror" hidden="true"> Price cannot be less than zero </label>
+							<label class="error" id="pricenanerror" hidden="true"> Price should be a number</label>
 						</div>
 
 						<div class="box-footer">
-							<button type="submit" class="btn btn-primary">Add</button>
+							<button type="button" id="illsub" onclick="validateform();" class="btn btn-primary">Add</button>
 						</div>
 					</form>
 				</div>

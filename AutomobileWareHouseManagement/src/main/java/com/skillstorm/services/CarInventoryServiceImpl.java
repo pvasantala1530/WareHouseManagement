@@ -49,7 +49,7 @@ public class CarInventoryServiceImpl implements CarInventoryService {
 
 
 	@Override
-	public CarInventory saveCarInventory(CarInventoryDTO cidto) {
+	public int saveCarInventory(CarInventoryDTO cidto) {
 		
 		
 
@@ -64,15 +64,17 @@ public class CarInventoryServiceImpl implements CarInventoryService {
 		
 		cinv.setCarmake(cm);
 		
+		int warehouseid = cm.getWarehouse().getId();
+		
 		cinv = carInventoryRepository.save(cinv);
 		
-		return cinv;
+		return warehouseid;
 	}
 
 
 
 	@Override
-	public void updateCarInventory(CarInventory ci,String inventoryid, String carmakeid) {
+	public int updateCarInventory(CarInventory ci,String inventoryid, String carmakeid) {
 		
 		
 		CarInventory existingcar = getCarInventory(Integer.valueOf(inventoryid));
@@ -87,6 +89,7 @@ public class CarInventoryServiceImpl implements CarInventoryService {
 		
 		existingcar.setCarmake(cm);
 		
+		int warehouseid = cm.getWarehouse().getId();
 		
 		
 		logger.info("cinv----------"+existingcar.toString());
@@ -98,7 +101,7 @@ public class CarInventoryServiceImpl implements CarInventoryService {
 		
 		carInventoryRepository.save(existingcar);
 		
-		
+		return warehouseid;
 	}
 
 
