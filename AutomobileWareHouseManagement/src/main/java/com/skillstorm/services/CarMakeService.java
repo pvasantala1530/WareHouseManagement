@@ -9,5 +9,5 @@ public interface CarMakeService {
 	
 	List<CarMakeDTO>  findByWareHouseId(int wareHouseId);
 	
-	
+	void saveNewCarMake(int Warehouseid, String newCarMake);
 }

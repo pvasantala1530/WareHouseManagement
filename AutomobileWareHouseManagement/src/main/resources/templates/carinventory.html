@@ -6,7 +6,11 @@
 		integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
 
-
+	<style>
+		.error {
+			color: red;
+		}
+	</style>
 	<script>
 
 		function gotoAddInventory(warehouseId) {
@@ -23,6 +27,23 @@
 			if (flag == 0)
 
 				alert('Select Car Brand to add Inventory');
+		}
+
+		function gotoAddMake(warehouseId) {
+
+
+			var carmake = document.getElementById('newcarmake').value;
+
+			if (carmake.length == 0) {
+				//let el = document.getElementById('newcarmake').st;
+				//document.getElementById('newcarmake').placeholder='Car Make cannot be empty';
+				//el.setAttribute("class" , "error");
+				alert('Car Make cannot be empty');
+			}
+
+			if (carmake.length > 0) {
+				window.location.href = "newmake/" + warehouseId + "/" + carmake;
+			}
 		}
 
 		function showinventorydetails(carmakeId) {
@@ -42,20 +63,32 @@
 					console.log(resp);
 					let text = "";
 
+					let formatting_options = {
+						style: 'currency',
+						currency: 'USD',
+						minimumFractionDigits: 0,
+					}
+					
+					let dollarString = new Intl.NumberFormat("en-US", formatting_options);
+						
+
 					resp.forEach(function (item, index) {
+						
+						let finalPrice = dollarString.format(item.price);
+						
 						text = text + "<tr><td>" + item.model + "</td>" +
 							"<td> " + item.color + "</td>" +
-							"<td>" + item.price + "</td>" +
+							"<td>" + finalPrice + "</td>" +
 							"<td>" + item.quantity + "</td>" +
-							"<td><a href='/autoinventorycontrol/inventory/edit/"+
-							item.inventoryid+"/"+
-							item.carmakeid+"/"+
-							"' class='btn btn-primary'>Update</a>"+
-							"<span>    </span>"+
-							"<a href='/autoinventorycontrol/deleteinventory/"+
-							item.inventoryid+"/"+
-							"' class='btn btn-danger'>Delete</a>"+
-							
+							"<td><a href='/autoinventorycontrol/inventory/edit/" +
+							item.inventoryid + "/" +
+							item.carmakeid + "/" +
+							"' class='btn btn-primary'>Update</a>" +
+							"<span>    </span>" +
+							"<a href='/autoinventorycontrol/deleteinventory/" +
+							item.inventoryid + "/" +
+							"' class='btn btn-danger'>Delete</a>" +
+
 							"</td></tr><tr>";
 					});
 
@@ -78,7 +111,7 @@
 
 	<nav class="navbar navbar-expand-md bg-dark navbar-dark">
 		<!-- Brand -->
-		<a class="navbar-brand" href="#">Auto Inventory Control System</a>
+		<a class="navbar-brand" href="/autoinventorycontrol/home">Auto Inventory Control System</a>
 
 		<!-- Toggler/collapsibe Button -->
 		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
@@ -97,10 +130,11 @@
 	</nav>
 	<br><br>
 
-	<div class="container">
+	<div class="container" style="width:500px;">
 		<br><br>
 
 		<h3>[(${warehouseLoc})]</h3>
+
 
 
 
@@ -122,28 +156,41 @@
 			</tbody>
 		</table>
 
-		<br>
+		<div class="input-group mb-3">
+			<input type="text" class="form-control" id="newcarmake" placeholder="Add New Car Make"
+				aria-label="Recipient's username" aria-describedby="basic-addon2">
+
+
+			<div class="input-group-append">
+				<button class="btn btn-outline-secondary" type="button"
+					style="background-color: #007bff;color:whitesmoke"
+					th:onclick="gotoAddMake([[${warehouseId}]]);">Add</button>
+			</div>
+		</div>
+
 		<div class="row">
 			<div class="col-lg-3">
-				<a th:onclick="gotoAddInventory([[${warehouseId}]]);" class="btn btn-primary btn-sm mb-3">Add
+				<a th:onclick="gotoAddInventory([[${warehouseId}]]);" class="btn btn-primary btn-sm mb-3"
+					style="color:white">Add New
 					inventory</a>
 			</div>
 		</div>
-		<br><br>
-		<table class="table" hidden="hidden" id="inventoryDetstab">
-			<thead class="thead-light">
-				<tr>
-					<th>Model</th>
-					<th>Color</th>
-					<th>Price</th>
-					<th>Quantity</th>
-					<th>Actions</th>
-				</tr>
-			</thead>
-			<tbody id="inventoryDets">
+	</div>
 
-			</tbody>
-		</table>
+	<table class="table table-bordered" hidden="hidden" id="inventoryDetstab" style="width:800px;" align="center">
+		<thead class="thead-light">
+			<tr>
+				<th>Model</th>
+				<th>Color</th>
+				<th>Price</th>
+				<th>Quantity</th>
+				<th>Actions</th>
+			</tr>
+		</thead>
+		<tbody id="inventoryDets">
+
+		</tbody>
+	</table>
 
 
 

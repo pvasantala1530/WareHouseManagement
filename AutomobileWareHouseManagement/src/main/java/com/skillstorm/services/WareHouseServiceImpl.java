@@ -31,7 +31,6 @@ public class WareHouseServiceImpl implements WareHouseService {
 	public List<WareHouseResponseDTO> findAll() {
 		
 		List<WareHouseResponseDTO> respDTOList = new ArrayList<>();
-		//respDTOList = wareHouseMapper.wareHouseEntitytoDTOMapper();
 		respDTOList = wareHouseMapper.wareHouseEntitytoDTOMapper(warehouseRepository.findAll());
 		return respDTOList;
 	}

@@ -30,19 +30,31 @@ import com.skillstorm.services.WareHouseServiceImpl;
 @RequestMapping("/autoinventorycontrol")
 public class AutoInventoryController {
 
-	@Autowired
 	private WareHouseServiceImpl wareHouseServiceImpl;
 
-	@Autowired
 	private CarMakeServiceImpl carMakeServiceImpl;
 
-	@Autowired
 	private CarInventoryServiceImpl carInventoryServiceImpl;
+
+	public AutoInventoryController(WareHouseServiceImpl wareHouseServiceImpl, CarMakeServiceImpl carMakeServiceImpl,
+			CarInventoryServiceImpl carInventoryServiceImpl) {
+		super();
+		this.wareHouseServiceImpl = wareHouseServiceImpl;
+		this.carMakeServiceImpl = carMakeServiceImpl;
+		this.carInventoryServiceImpl = carInventoryServiceImpl;
+	}
 
 	Logger logger = LoggerFactory.getLogger(getClass());
 
+	/*
+	 * 
+	 * Method returns the list of warehouses
+	 * 
+	 * */
 	@GetMapping("/warehouses")
 	public String getWarehouses(Model model) {
+
+		logger.info("Entered the getWarehouses method");
 
 		try {
 			List<WareHouseResponseDTO> whdtolist = new ArrayList<>();
@@ -51,18 +63,48 @@ public class AutoInventoryController {
 
 			model.addAttribute("warehouses", whdtolist);
 
-			logger.info("hello" + whdtolist.toString());
+			logger.debug("Warehouse list" + whdtolist.toString());
+
 			return "warehouses";
+
 		} catch (Exception e) {
+			logger.error(e.getLocalizedMessage());
 			return "error";
 		}
 	}
+	
+	/*
+	 * 
+	 * Navigates to homepage
+	 * 
+	 * */
+	@GetMapping("/home")
+	public String gotohome(Model model) {
+
+		logger.info("Entered the gotohome method");
+
+		try {
+			
+
+			return "home";
+
+		} catch (Exception e) {
+			logger.error(e.getLocalizedMessage());
+			return "error";
+		}
+	}
+	
+	
+	/*
+	 * Method returns the inventory of each make(brand) of the warehouse 
+	 * */
 
 	@GetMapping("/inventory/{warehouseId}")
 	public String getmake(@PathVariable String warehouseId, Model model) {
 
+		logger.info("Entered the getmake method");
 		try {
-			logger.info("warehouseId: " + warehouseId);
+			logger.debug("warehouseId: " + warehouseId);
 
 			List<CarMakeDTO> dtolist = new ArrayList<>();
 			String warehouseLoc = "";
@@ -70,101 +112,82 @@ public class AutoInventoryController {
 			dtolist = carMakeServiceImpl.findByWareHouseId(Integer.valueOf(warehouseId));
 
 			for (CarMakeDTO dto : dtolist) {
-				logger.info("***********warehouseLoc " + warehouseLoc);
-				logger.info("**********" + dto.toString());
+				logger.debug("warehouseLoc " + warehouseLoc);
+				logger.debug("dto: " + dto.toString());
 				warehouseLoc = dto.getWarehouseLocation();
 				warehouseId = String.valueOf(dto.getWarehouseId());
 			}
 
-			logger.info(dtolist.toString());
+			logger.debug(dtolist.toString());
 			model.addAttribute("carmakelist", dtolist);
 			model.addAttribute("warehouseLoc", warehouseLoc);
 			model.addAttribute("warehouseId", warehouseId);
 
 			return "carinventory";
+			
 		} catch (Exception e) {
+			logger.error(e.getLocalizedMessage());
 			return "error";
 		}
 	}
 
-	@GetMapping("/inventory/edit/{inventoryid}/{carmakeid}") // {color}/{price}/{quantity}/{model}")
-	public String editInventory(@PathVariable String inventoryid, @PathVariable String carmakeid, Model model) {// ,@PathVariable
-																												// String
-																												// color,@PathVariable
-																												// String
-																												// model,@PathVariable
-																												// int
-																												// quantity,
-		// athVariable int price,@PathVariable int carmakeid,Model model1) {
+	/*
+	 * Method takes us to: update the existing inventory form page
+	 * 
+	 * */
+	@GetMapping("/inventory/edit/{inventoryid}/{carmakeid}")
+	public String editInventory(@PathVariable String inventoryid, @PathVariable String carmakeid, Model model) {
+		
+		logger.info("Entered the editInventory method");
 
 		try {
 			model.addAttribute("carmakeid", carmakeid);
 			model.addAttribute("invid", inventoryid);
 
-			logger.info("(((((((((((((((((((()))))))))))))" + inventoryid + "------" + carmakeid);
+			logger.debug("inventoryid: " + inventoryid + " carmakeid" + carmakeid);
 
 			model.addAttribute("carinv", carInventoryServiceImpl.getCarInventory(Integer.valueOf(inventoryid)));
 
 			return "updateinventory";
+			
 		} catch (Exception e) {
+			logger.error(e.getLocalizedMessage());
 			return "error";
 		}
 	}
 
-	@PostMapping("updateinventory/{inventoryid}/{carmakeid}")
-	public String updateInventory(@ModelAttribute("carinv") CarInventory ci, @PathVariable String inventoryid,
-			@PathVariable String carmakeid) {
+	
 
-		try {
-			int warehouseid = carInventoryServiceImpl.updateCarInventory(ci, inventoryid, carmakeid);
-			return "redirect:/autoinventorycontrol/inventory/"+warehouseid;
-		} 
-		
-		catch (Exception e) {
-			return "error";
-		}
-	}
-
+	/*
+	 * This method is called once the user clicks the delete button to delete the inventory.
+	 * The pertaining data is deleted in the DB and control is redirected back to warehouses list page. 
+	 * */
 	@GetMapping("deleteinventory/{inventoryid}")
 	public String deleteInventory(@PathVariable String inventoryid) {
+
+		logger.info("Entered the deleteInventory method");
+
 		try {
 			carInventoryServiceImpl.deleteCarInventoryById(Integer.valueOf(inventoryid));
 			return "redirect:/autoinventorycontrol/warehouses";
 		} catch (Exception e) {
+			logger.error(e.getLocalizedMessage());
 			return "error";
 		}
 	}
 
-	// @PostMapping("/inventory/{warehouseId}/{makeid}/{carmake}")
-	@PostMapping("/inventory/{makeid}")
-	public String SaveInventory(@Valid CarInventory validateCarInv, BindingResult result,
-			@ModelAttribute("carinventorydto") CarInventoryDTO cidto,
-			// @PathVariable String warehouseId,
-			@PathVariable String makeid
-	// @PathVariable String carmake
-	) {
-
-		try {
-			cidto.setcarmakeid(Integer.valueOf(makeid));
-			int warehouseid = carInventoryServiceImpl.saveCarInventory(cidto);
-
-			logger.info("^^^^^^^^^^^^^^^^^^cidto^^^^^^^^^^^" + cidto.toString());
-
-			return "redirect:/autoinventorycontrol/inventory/"+warehouseid;
-		} 
-		
-		catch (Exception e) {
-			return "error";
-		}
-	}
-
+	/*
+	 * Method takes us to the form to add new inventory
+	 * */
 	@GetMapping("/inventory/new/{warehouseId}/{carmakeid}/{carmake}")
 	public String createInventory(@PathVariable String warehouseId, @PathVariable String carmakeid,
 			@PathVariable String carmake, Model model) {
 
+		logger.info("Entered the createInventory method");
+
 		try {
-			logger.info("&&&&&&&&&&&carmakeid###############" + carmakeid);
-			logger.info("&&&&&&&&&&&warehouseId###############" + warehouseId);
+			logger.debug("carmakeid" + carmakeid);
+			logger.debug("warehouseId" + warehouseId);
 			List<CarMakeDTO> dtolist = new ArrayList<>();
 			String warehouseLoc = "";
 
@@ -189,26 +212,109 @@ public class AutoInventoryController {
 		}
 	}
 
+	/*
+	 * Method is called within javascript ajax to populate the inventory details of a particular brand(make)
+	 * */
 	@GetMapping(value = "/inventory/showinventorydetails/{carmakeid}")
 	public @ResponseBody List<CarInventoryDTO> getInventoryDetails(@PathVariable String carmakeid) {
+
+		logger.info("Entered the getInventoryDetails method");
+
 		try {
-			logger.info("carmakeId: " + carmakeid);
+			logger.debug("carmakeId: " + carmakeid);
 
 			List<CarInventoryDTO> dtolist = new ArrayList<>();
 
 			dtolist = carInventoryServiceImpl.findCarInventoryBymakeId(Integer.valueOf(carmakeid));
 
-			logger.info("_________________" + dtolist.toString());
+			logger.debug("dtolist" + dtolist.toString());
 			return dtolist;
 		} catch (Exception e) {
+			logger.error(e.getLocalizedMessage());
 			return null;
 		}
 	}
+	
+	/*
+	 * Methos adds new inventory to the DB and redirects to inventory details page.
+	 * */
+	@PostMapping("/inventory/{makeid}")
+	public String addInventory(
+			@ModelAttribute("carinventorydto") CarInventoryDTO cidto,
+			@PathVariable String makeid) 
+	{
+		logger.info("Entered the saveInventory method");
 
+		try {
+			
+			if(!(makeid==null))
+			cidto.setcarmakeid(Integer.valueOf(makeid));
+			int warehouseid = carInventoryServiceImpl.saveCarInventory(cidto);
+
+			logger.debug("cidto: " + cidto.toString());
+
+			return "redirect:/autoinventorycontrol/inventory/" + warehouseid;
+		}
+
+		catch (Exception e) {
+			return "error";
+		}
+	}
+
+	/*
+	 * Method updates the existing inventory and saves the updated details in the DB
+		and redirects to the inventory page.
+	 * */
+	@PostMapping("updateinventory/{inventoryid}/{carmakeid}")
+	public String updateInventory(@ModelAttribute("carinv") CarInventory ci, @PathVariable String inventoryid,
+			@PathVariable String carmakeid) {
+
+		logger.info("Entered the updateInventory method");
+		try {
+			
+			int warehouseid = carInventoryServiceImpl.updateCarInventory(ci, inventoryid, carmakeid);
+			return "redirect:/autoinventorycontrol/inventory/" + warehouseid;
+		}
+
+		catch (Exception e) {
+			logger.error(e.getLocalizedMessage());
+			return "error";
+		}
+	}
+	
+	/*
+	 * Method adds new car make to the DB
+	 * */
+	@GetMapping("/inventory/newmake/{warehouseid}/{newmake}")
+	public String addNewMake(
+		//	@ModelAttribute("carmakedto") CarMakeDTO cmdto,
+			@PathVariable String warehouseid,
+			@PathVariable String newmake) 
+	{
+		logger.info("Entered the saveInventory method");
+
+		try {
+			
+			if(!(warehouseid==null))
+				carMakeServiceImpl.saveNewCarMake(Integer.valueOf(warehouseid), newmake);
+				
+			return "redirect:/autoinventorycontrol/inventory/" + warehouseid;
+		}
+
+		catch (Exception e) {
+			return "error";
+		}
+	}
+
+
+	
+	/*
+	 * In case of any exceptions or errors, the user will be redirected to the error page
+	 * */
 	@GetMapping("/error")
 	public String fallback(Model model) {
 
-		logger.info("Entered");
+		logger.info("Entered the fallback");
 		return "error";
 	}
 

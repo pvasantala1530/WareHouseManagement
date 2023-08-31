@@ -46,10 +46,17 @@
 				let hidden = element.getAttribute("hidden");
 				element.removeAttribute("hidden");
 			}
+			else if(quantity>5)
+			{
+				let element = document.getElementById("quantitylogerror");
+				let hidden = element.getAttribute("hidden");
+				element.removeAttribute("hidden");
+			}
 			else
 				{
 					document.getElementById('quantityerror').hidden = true
 					document.getElementById('quantitynanerror').hidden = true
+					document.getElementById('quantitylogerror').hidden = true
 				}
 			
 			if (price <= 0) {
@@ -70,7 +77,7 @@
 				
 			}
 			
-			if(model.length>0 && color.length>0 && quantity>0 && price>0)
+			if(model.length>0 && color.length>0 && quantity>0 && quantity<6 && price>0)
 			{
 				const form = document.getElementById("updateinv");
 				form.submit();
@@ -85,7 +92,7 @@
 <body>
 	<nav class="navbar navbar-expand-md bg-dark navbar-dark">
 		<!-- Brand -->
-		<a class="navbar-brand" href="#">Auto Inventory Control System</a>
+		<a class="navbar-brand" href="/autoinventorycontrol/home">Auto Inventory Control System</a>
 
 		<!-- Toggler/collapsibe Button -->
 		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
@@ -128,12 +135,13 @@
 							<label class="error" id="colorerror" hidden="true"> Color cannot be empty </label>
 						</div>
 						<div class="form-group">
-							<label> Quantity* </label>
+							<label> Quantity* (max 5)</label>
 							<input type="text" name="quantity" id="quantity" th:field="*{quantity}" class="form-control"
 								placeholder="Quantity">
-							<label class="error" id="quantityerror" hidden="true"> Quantity cannot be less than zero
+							<label class="error" id="quantityerror" hidden="true"> Quantity cannot be less than zero and greater than 599250
 							</label>
 							<label class="error" id="quantitynanerror" hidden="true"> Quantity should be a number</label>
+							<label class="error" id="quantitylogerror" hidden="true"> Each model cannot contain more than 5 cars</label>
 						</div>
 						<div class="form-group">
 							<label> Price* </label>
