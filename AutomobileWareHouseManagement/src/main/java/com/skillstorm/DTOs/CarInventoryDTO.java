@@ -6,6 +6,8 @@ public class CarInventoryDTO {
 	
 	private int carmakeid;
 	
+	private String carmake;
+	
 	private String model;
 	
 	private String color;
@@ -15,6 +17,17 @@ public class CarInventoryDTO {
 	private int price;
 	
 	private int warehouseid;
+
+	
+	
+
+	public String getCarmake() {
+		return carmake;
+	}
+
+	public void setCarmake(String carmake) {
+		this.carmake = carmake;
+	}
 
 	public int getWarehouseid() {
 		return warehouseid;
@@ -79,7 +92,7 @@ public class CarInventoryDTO {
 
 	@Override
 	public String toString() {
-		return "CarInventoryDTO [carmakeid=" + carmakeid + ", model=" + model + ", color=" + color + ", quantity="
+		return "CarInventoryDTO [carmake=" + carmake + " carmakeid=" + carmakeid + ", model=" + model + ", color=" + color + ", quantity="
 				+ quantity + ", price=" + price + "]";
 	}
 	

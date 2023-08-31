@@ -60,7 +60,10 @@ public class CarInventoryDTOMapper {
 		dto.setInventoryid(ci.getId());
 		
 		if(ci.getCarmake()!=null && ci.getCarmake().getWarehouse()!=null)
-		dto.setWarehouseid(ci.getCarmake().getWarehouse().getId());
+		{
+			dto.setWarehouseid(ci.getCarmake().getWarehouse().getId());
+			dto.setCarmake(ci.getCarmake().getMake());
+		}
 		
 
 		return dto;

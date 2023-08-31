@@ -36,6 +36,7 @@ public class AutoInventoryController {
 
 	private CarInventoryServiceImpl carInventoryServiceImpl;
 
+	/*Auto wired the beans*/
 	public AutoInventoryController(WareHouseServiceImpl wareHouseServiceImpl, CarMakeServiceImpl carMakeServiceImpl,
 			CarInventoryServiceImpl carInventoryServiceImpl) {
 		super();
@@ -48,7 +49,28 @@ public class AutoInventoryController {
 
 	/*
 	 * 
-	 * Method returns the list of warehouses
+	 * This end point navigates to home page
+	 * 
+	 * */
+	@GetMapping("/home")
+	public String gotohome(Model model) {
+
+		logger.info("Entered the gotohome method");
+
+		try {
+			
+
+			return "home";
+
+		} catch (Exception e) {
+			logger.error(e.getLocalizedMessage());
+			return "error";
+		}
+	}
+	
+	/*
+	 * 
+	 *  returns the list of warehouses
 	 * 
 	 * */
 	@GetMapping("/warehouses")
@@ -73,30 +95,11 @@ public class AutoInventoryController {
 		}
 	}
 	
-	/*
-	 * 
-	 * Navigates to homepage
-	 * 
-	 * */
-	@GetMapping("/home")
-	public String gotohome(Model model) {
-
-		logger.info("Entered the gotohome method");
-
-		try {
-			
-
-			return "home";
-
-		} catch (Exception e) {
-			logger.error(e.getLocalizedMessage());
-			return "error";
-		}
-	}
+	
 	
 	
 	/*
-	 * Method returns the inventory of each make(brand) of the warehouse 
+	 * This end point returns the inventory of each make(brand) of the warehouse 
 	 * */
 
 	@GetMapping("/inventory/{warehouseId}")
@@ -125,51 +128,6 @@ public class AutoInventoryController {
 
 			return "carinventory";
 			
-		} catch (Exception e) {
-			logger.error(e.getLocalizedMessage());
-			return "error";
-		}
-	}
-
-	/*
-	 * Method takes us to: update the existing inventory form page
-	 * 
-	 * */
-	@GetMapping("/inventory/edit/{inventoryid}/{carmakeid}")
-	public String editInventory(@PathVariable String inventoryid, @PathVariable String carmakeid, Model model) {
-		
-		logger.info("Entered the editInventory method");
-
-		try {
-			model.addAttribute("carmakeid", carmakeid);
-			model.addAttribute("invid", inventoryid);
-
-			logger.debug("inventoryid: " + inventoryid + " carmakeid" + carmakeid);
-
-			model.addAttribute("carinv", carInventoryServiceImpl.getCarInventory(Integer.valueOf(inventoryid)));
-
-			return "updateinventory";
-			
-		} catch (Exception e) {
-			logger.error(e.getLocalizedMessage());
-			return "error";
-		}
-	}
-
-	
-
-	/*
-	 * This method is called once the user clicks the delete button to delete the inventory.
-	 * The pertaining data is deleted in the DB and control is redirected back to warehouses list page. 
-	 * */
-	@GetMapping("deleteinventory/{inventoryid}")
-	public String deleteInventory(@PathVariable String inventoryid) {
-
-		logger.info("Entered the deleteInventory method");
-
-		try {
-			carInventoryServiceImpl.deleteCarInventoryById(Integer.valueOf(inventoryid));
-			return "redirect:/autoinventorycontrol/warehouses";
 		} catch (Exception e) {
 			logger.error(e.getLocalizedMessage());
 			return "error";
@@ -211,7 +169,75 @@ public class AutoInventoryController {
 			return "error";
 		}
 	}
+	
+	/*
+	 * This end point takes us to: update the existing inventory form page
+	 * 
+	 * */
+	@GetMapping("/inventory/edit/{inventoryid}/{carmakeid}/{carmake}")
+	public String editInventory(@PathVariable String inventoryid, @PathVariable String carmakeid,
+			@PathVariable String carmake, Model model) {
+		
+		logger.info("Entered the editInventory method");
 
+		try {
+			model.addAttribute("carmakeid", carmakeid);
+			model.addAttribute("invid", inventoryid);
+			model.addAttribute("carmake", carmake);
+
+			logger.debug("inventoryid: " + inventoryid + " carmakeid" + carmakeid);
+
+			model.addAttribute("carinv", carInventoryServiceImpl.getCarInventory(Integer.valueOf(inventoryid)));
+
+			return "updateinventory";
+			
+		} catch (Exception e) {
+			logger.error(e.getLocalizedMessage());
+			return "error";
+		}
+	}
+
+	
+
+	/*
+	 * This method is called once the user clicks the delete button to delete the inventory.
+	 * The pertaining data is deleted in the DB and control is redirected back to inventory list page. 
+	 * */
+	@GetMapping("deleteinventory/{inventoryid}/{warehouseid}")
+	public String deleteInventory(@PathVariable String inventoryid, @PathVariable String warehouseid) {
+
+		logger.info("Entered the deleteInventory method");
+
+		try {
+			carInventoryServiceImpl.deleteCarInventoryById(Integer.valueOf(inventoryid));
+			return "redirect:/autoinventorycontrol/inventory/"+warehouseid;
+		} catch (Exception e) {
+			logger.error(e.getLocalizedMessage());
+			return "error";
+		}
+	}
+
+	/*
+	 * This endpoint is called once the user clicks delete button for carmake.
+	 * The carmake and all the car inventory pertaining to it will be deleted
+	 * 
+	 * */
+	
+	@GetMapping("deletecarmake/{warehouseId}/{carmakeid}")
+	public String deleteCarMake(@PathVariable String warehouseId, @PathVariable String carmakeid) {
+
+		logger.info("Entered the deleteInventory method");
+
+		try {
+			
+			carMakeServiceImpl.deleteCarMakeById(Integer.valueOf(carmakeid));
+			return "redirect:/autoinventorycontrol/inventory/"+warehouseId;
+		} catch (Exception e) {
+			logger.error(e.getLocalizedMessage());
+			return "error";
+		}
+	}
+	
 	/*
 	 * Method is called within javascript ajax to populate the inventory details of a particular brand(make)
 	 * */
@@ -227,6 +253,7 @@ public class AutoInventoryController {
 
 			dtolist = carInventoryServiceImpl.findCarInventoryBymakeId(Integer.valueOf(carmakeid));
 
+			
 			logger.debug("dtolist" + dtolist.toString());
 			return dtolist;
 		} catch (Exception e) {

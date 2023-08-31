@@ -3,6 +3,8 @@ package com.skillstorm.services;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +22,8 @@ public class CarMakeServiceImpl implements CarMakeService {
 	private CarMakeDTOMapper mapper;
 	private WareHouseRepository whrepo;
 	
+	Logger logger = LoggerFactory.getLogger(getClass());
+	
 	@Autowired
 	public CarMakeServiceImpl(CarMakeRepository carmakeRepo, CarMakeDTOMapper mapper, WareHouseRepository whrepo) {
 		super();
@@ -29,13 +33,16 @@ public class CarMakeServiceImpl implements CarMakeService {
 	}
 
 
-
+	/* This method calls the car make repository to get all the brands of particular warehouse*/
 	@Override
 	public List<CarMakeDTO>  findByWareHouseId(int wareHouseId) {
 		
 		
 		List<CarMakeDTO>  cmDTOlist = new ArrayList<>();
+		
 		cmDTOlist = mapper.carMakeEntitytoDTOMapper(carmakeRepo.findByWarehouseId(wareHouseId));
+		
+		logger.debug("Carmake dto list: "+cmDTOlist.toString());
 		
 		return cmDTOlist;
 	}
@@ -59,6 +66,16 @@ public class CarMakeServiceImpl implements CarMakeService {
 		carmakeRepo.save(cm);
 		
 		return;
+	}
+
+
+	@Override
+	public void deleteCarMakeById(int carmakeid) {
+
+		carmakeRepo.deleteById(carmakeid);
+		
+		return;
+		
 	}
 
 }
