@@ -30,7 +30,7 @@ public class WareHouseServiceImpl implements WareHouseService {
 
 
 	/*
-	 * This method gets the list of warehouses from the DB
+	 * This method gets the list of warehouses from the warehouses table
 	 * */
 	@Override
 	public List<WareHouseResponseDTO> findAll() {

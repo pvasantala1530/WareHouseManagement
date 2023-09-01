@@ -3,14 +3,10 @@ package com.skillstorm.controllers;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.validation.Valid;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -36,7 +32,7 @@ public class AutoInventoryController {
 
 	private CarInventoryServiceImpl carInventoryServiceImpl;
 
-	/*Auto wired the beans*/
+	/* Auto wired the beans */
 	public AutoInventoryController(WareHouseServiceImpl wareHouseServiceImpl, CarMakeServiceImpl carMakeServiceImpl,
 			CarInventoryServiceImpl carInventoryServiceImpl) {
 		super();
@@ -51,14 +47,13 @@ public class AutoInventoryController {
 	 * 
 	 * This end point navigates to home page
 	 * 
-	 * */
+	 */
 	@GetMapping("/home")
 	public String gotohome(Model model) {
 
 		logger.info("Entered the gotohome method");
 
 		try {
-			
 
 			return "home";
 
@@ -67,12 +62,12 @@ public class AutoInventoryController {
 			return "error";
 		}
 	}
-	
+
 	/*
 	 * 
-	 *  returns the list of warehouses
+	 * This returns the list of warehouses
 	 * 
-	 * */
+	 */
 	@GetMapping("/warehouses")
 	public String getWarehouses(Model model) {
 
@@ -94,13 +89,10 @@ public class AutoInventoryController {
 			return "error";
 		}
 	}
-	
-	
-	
-	
+
 	/*
-	 * This end point returns the inventory of each make(brand) of the warehouse 
-	 * */
+	 * This end point returns the inventory of each make(brand) of the warehouse
+	 */
 
 	@GetMapping("/inventory/{warehouseId}")
 	public String getmake(@PathVariable String warehouseId, Model model) {
@@ -127,7 +119,7 @@ public class AutoInventoryController {
 			model.addAttribute("warehouseId", warehouseId);
 
 			return "carinventory";
-			
+
 		} catch (Exception e) {
 			logger.error(e.getLocalizedMessage());
 			return "error";
@@ -135,8 +127,8 @@ public class AutoInventoryController {
 	}
 
 	/*
-	 * Method takes us to the form to add new inventory
-	 * */
+	 * This end point takes us to the form to add new inventory
+	 */
 	@GetMapping("/inventory/new/{warehouseId}/{carmakeid}/{carmake}")
 	public String createInventory(@PathVariable String warehouseId, @PathVariable String carmakeid,
 			@PathVariable String carmake, Model model) {
@@ -169,15 +161,15 @@ public class AutoInventoryController {
 			return "error";
 		}
 	}
-	
+
 	/*
 	 * This end point takes us to: update the existing inventory form page
 	 * 
-	 * */
+	 */
 	@GetMapping("/inventory/edit/{inventoryid}/{carmakeid}/{carmake}")
 	public String editInventory(@PathVariable String inventoryid, @PathVariable String carmakeid,
 			@PathVariable String carmake, Model model) {
-		
+
 		logger.info("Entered the editInventory method");
 
 		try {
@@ -190,19 +182,18 @@ public class AutoInventoryController {
 			model.addAttribute("carinv", carInventoryServiceImpl.getCarInventory(Integer.valueOf(inventoryid)));
 
 			return "updateinventory";
-			
+
 		} catch (Exception e) {
 			logger.error(e.getLocalizedMessage());
 			return "error";
 		}
 	}
 
-	
-
 	/*
-	 * This method is called once the user clicks the delete button to delete the inventory.
-	 * The pertaining data is deleted in the DB and control is redirected back to inventory list page. 
-	 * */
+	 * This is reached once the user clicks the delete button to delete the
+	 * inventory. The pertaining data is deleted in the DB and control is redirected
+	 * back to inventory list page.
+	 */
 	@GetMapping("deleteinventory/{inventoryid}/{warehouseid}")
 	public String deleteInventory(@PathVariable String inventoryid, @PathVariable String warehouseid) {
 
@@ -210,7 +201,7 @@ public class AutoInventoryController {
 
 		try {
 			carInventoryServiceImpl.deleteCarInventoryById(Integer.valueOf(inventoryid));
-			return "redirect:/autoinventorycontrol/inventory/"+warehouseid;
+			return "redirect:/autoinventorycontrol/inventory/" + warehouseid;
 		} catch (Exception e) {
 			logger.error(e.getLocalizedMessage());
 			return "error";
@@ -218,29 +209,30 @@ public class AutoInventoryController {
 	}
 
 	/*
-	 * This endpoint is called once the user clicks delete button for carmake.
-	 * The carmake and all the car inventory pertaining to it will be deleted
+	 * This end point is called once the user clicks delete button for car make. The
+	 * car make and all the car inventory pertaining to it will be deleted
 	 * 
-	 * */
-	
+	 */
+
 	@GetMapping("deletecarmake/{warehouseId}/{carmakeid}")
 	public String deleteCarMake(@PathVariable String warehouseId, @PathVariable String carmakeid) {
 
 		logger.info("Entered the deleteInventory method");
 
 		try {
-			
+
 			carMakeServiceImpl.deleteCarMakeById(Integer.valueOf(carmakeid));
-			return "redirect:/autoinventorycontrol/inventory/"+warehouseId;
+			return "redirect:/autoinventorycontrol/inventory/" + warehouseId;
 		} catch (Exception e) {
 			logger.error(e.getLocalizedMessage());
 			return "error";
 		}
 	}
-	
+
 	/*
-	 * Method is called within javascript ajax to populate the inventory details of a particular brand(make)
-	 * */
+	 * Method is called within javascript ajax to populate the inventory details of
+	 * a particular brand(make)
+	 */
 	@GetMapping(value = "/inventory/showinventorydetails/{carmakeid}")
 	public @ResponseBody List<CarInventoryDTO> getInventoryDetails(@PathVariable String carmakeid) {
 
@@ -253,7 +245,6 @@ public class AutoInventoryController {
 
 			dtolist = carInventoryServiceImpl.findCarInventoryBymakeId(Integer.valueOf(carmakeid));
 
-			
 			logger.debug("dtolist" + dtolist.toString());
 			return dtolist;
 		} catch (Exception e) {
@@ -261,21 +252,18 @@ public class AutoInventoryController {
 			return null;
 		}
 	}
-	
+
 	/*
-	 * Methos adds new inventory to the DB and redirects to inventory details page.
-	 * */
+	 * This adds new inventory to the DB and redirects to inventory details page.
+	 */
 	@PostMapping("/inventory/{makeid}")
-	public String addInventory(
-			@ModelAttribute("carinventorydto") CarInventoryDTO cidto,
-			@PathVariable String makeid) 
-	{
+	public String addInventory(@ModelAttribute("carinventorydto") CarInventoryDTO cidto, @PathVariable String makeid) {
 		logger.info("Entered the saveInventory method");
 
 		try {
-			
-			if(!(makeid==null))
-			cidto.setcarmakeid(Integer.valueOf(makeid));
+
+			if (!(makeid == null))
+				cidto.setcarmakeid(Integer.valueOf(makeid));
 			int warehouseid = carInventoryServiceImpl.saveCarInventory(cidto);
 
 			logger.debug("cidto: " + cidto.toString());
@@ -290,15 +278,15 @@ public class AutoInventoryController {
 
 	/*
 	 * Method updates the existing inventory and saves the updated details in the DB
-		and redirects to the inventory page.
-	 * */
+	 * and redirects to the inventory page.
+	 */
 	@PostMapping("updateinventory/{inventoryid}/{carmakeid}")
 	public String updateInventory(@ModelAttribute("carinv") CarInventory ci, @PathVariable String inventoryid,
 			@PathVariable String carmakeid) {
 
 		logger.info("Entered the updateInventory method");
 		try {
-			
+
 			int warehouseid = carInventoryServiceImpl.updateCarInventory(ci, inventoryid, carmakeid);
 			return "redirect:/autoinventorycontrol/inventory/" + warehouseid;
 		}
@@ -308,23 +296,21 @@ public class AutoInventoryController {
 			return "error";
 		}
 	}
-	
+
 	/*
 	 * Method adds new car make to the DB
-	 * */
+	 */
 	@GetMapping("/inventory/newmake/{warehouseid}/{newmake}")
 	public String addNewMake(
-		//	@ModelAttribute("carmakedto") CarMakeDTO cmdto,
-			@PathVariable String warehouseid,
-			@PathVariable String newmake) 
-	{
+			// @ModelAttribute("carmakedto") CarMakeDTO cmdto,
+			@PathVariable String warehouseid, @PathVariable String newmake) {
 		logger.info("Entered the saveInventory method");
 
 		try {
-			
-			if(!(warehouseid==null))
+
+			if (!(warehouseid == null))
 				carMakeServiceImpl.saveNewCarMake(Integer.valueOf(warehouseid), newmake);
-				
+
 			return "redirect:/autoinventorycontrol/inventory/" + warehouseid;
 		}
 
@@ -333,11 +319,10 @@ public class AutoInventoryController {
 		}
 	}
 
-
-	
 	/*
-	 * In case of any exceptions or errors, the user will be redirected to the error page
-	 * */
+	 * In case of any exceptions or errors, the user will be redirected to the error
+	 * page
+	 */
 	@GetMapping("/error")
 	public String fallback(Model model) {
 

@@ -1,3 +1,15 @@
+<!-- 
+	
+	
+
+	*************** This page presents the form to add new car model to add to the car_inventory table ********************* 
+	
+	
+	
+	
+-->
+
+
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
@@ -45,9 +57,10 @@
 				<h5 class="text-center"> Make: [(${carmake})]</h5>
 
 				<div class="card-body">
-					<form id="createinv" action="#" th:action="@{/autoinventorycontrol/inventory/{makeid}(makeid=${makeid})}"
+					<form id="createinv" action="#"
+						th:action="@{/autoinventorycontrol/inventory/{makeid}(makeid=${makeid})}"
 						th:object="${carinventorydto}" method="POST" onsubmit="validateform();">
-						
+
 						<div class="form-group">
 							<label> Required fields marked as * </label>
 						</div>
@@ -67,9 +80,12 @@
 							<label> Quantity* </label>
 							<input type="text" name="quantity" id="quantity" th:field="*{quantity}" class="form-control"
 								placeholder="Quantity">
-							<label class="error" id="quantityerror" hidden="true"> Quantity cannot be less than zero and greater than 5</label>
-							<label class="error" id="quantitynanerror" hidden="true"> Quantity should be a number</label>
-							<label class="error" id="quantitylogerror" hidden="true"> Each model cannot contain more than 5 cars</label>
+							<label class="error" id="quantityerror" hidden="true"> Quantity cannot be less than zero and
+								greater than 5</label>
+							<label class="error" id="quantitynanerror" hidden="true"> Quantity should be a
+								number</label>
+							<label class="error" id="quantitylogerror" hidden="true"> Each model cannot contain more
+								than 5 cars</label>
 						</div>
 						<div class="form-group">
 							<label> Price* </label>
@@ -80,7 +96,8 @@
 						</div>
 
 						<div class="box-footer">
-							<button type="button" id="illsub" onclick="validateform();" class="btn btn-primary">Add</button>
+							<button type="button" id="illsub" onclick="validateform();"
+								class="btn btn-primary">Add</button>
 						</div>
 					</form>
 				</div>

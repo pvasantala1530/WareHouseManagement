@@ -33,7 +33,7 @@ public class CarMakeServiceImpl implements CarMakeService {
 	}
 
 
-	/* This method calls the car make repository to get all the brands of particular warehouse*/
+	/* This method calls the car make repository to get all the brands of particular warehouse from the car_make table*/
 	@Override
 	public List<CarMakeDTO>  findByWareHouseId(int wareHouseId) {
 		
@@ -47,6 +47,8 @@ public class CarMakeServiceImpl implements CarMakeService {
 		return cmDTOlist;
 	}
 	
+	
+	/*This method saves the newly added car make to the car_make table */
 	@Override
 	public void saveNewCarMake(int Warehouseid, String newCarMake) {
 		
@@ -69,6 +71,7 @@ public class CarMakeServiceImpl implements CarMakeService {
 	}
 
 
+	/* This method deletes particular car make from the car_make table*/
 	@Override
 	public void deleteCarMakeById(int carmakeid) {
 
