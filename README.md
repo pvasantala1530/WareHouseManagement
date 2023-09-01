@@ -3,9 +3,9 @@
 Auto Inventory Control system is a tool used by the warehouse managers to add new inventory and modify the existing inventory details of the warehouse
 
 Enitities: 
-  Warehouse
-  CarMake
-  CarInventory
+Warehouse
+CarMake
+CarInventory
 
 Technologies used: 
   Spring boot to reduce the boiler plate code.
